@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         // });
 
         // lodash 'pick' method
-        const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+        const token = user.generateAuthToken();
         res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 
     }
