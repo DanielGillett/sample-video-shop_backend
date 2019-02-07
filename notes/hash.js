@@ -25,3 +25,8 @@ async function run(){
     console.log(hashed);
 }
 run();
+
+/*
+    to verify the password, use compare (incoming password, with user password)
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+*/
