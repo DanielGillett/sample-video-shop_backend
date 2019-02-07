@@ -1,0 +1,16 @@
+PRIVATE!!!  DO NOT PASS THIS ANY SERVER
+FOR DEVELOPMENT ONLY!!!
+
+default.json...
+{
+    "jwtPrivateKey": ""
+}
+
+custom-environment-variables.json...
+{
+    "jwtPrivateKey": "vidly_jwtPrivateKey"
+}
+
+server settings...
+cmd shell → set vidly_jwtPrivateKey=mySecureKey
+cmd bash → export vidly_jwtPrivateKey=mySecureKey
