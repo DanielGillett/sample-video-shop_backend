@@ -1,0 +1,38 @@
+
+npm i winston
+
+The winston you get is the default logger that is exported 
+from the require('winston') module.
+
+using the default logger is sufficient for small to 
+medium-sized applications.
+
+You may need to custom logger only if you're  building a 
+really large, complex application; and you want to have 
+different loggers that behave differently in different 
+parts of the application.
+
+This require('winston') logger object has what is called
+a 'transport'.  ..a storage device for a logs.
+
+Winston comes with a few core transports:
+console
+file
+http
+
+There are also pluggins for winston.  there are other npm
+modules for logging messages in:
+mongoDB
+couchDB
+Redis
+Loggly - which is a very popular log analysis and monitoring
+             service for enterprise applications.
+
+The default winston comes with 1 transport that is for 
+logging messages on the console.
+
+Here, in this lesson, we are going to create another 
+transport for logging messages in a file...
+
+// winston needs more study.  We're using a different version of Winston 
+// which seems to have more involved methods setting it up corretly.

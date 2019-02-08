@@ -1,6 +1,21 @@
+const winston = require('winston');
 
-module.exports = function(err, req, res, next){
-    // log the exception
+// winston needs more study.  We're using a different version of Winston 
+// which seems to have more involved methods setting it up corretly.
+
+module.exports = function(err, req, res, next) {
+    // Log the error
+    // 1) set the logging level:
+        //  error
+        //  warn
+        //  info
+        //  verbose
+        //  debug
+        //  silly
+    //winston.log('error', err.message);
+    winston.error(err.message, err);
+    //winston.error(new Error('Error as info'));
+
     // Internal Server Error - something failed on the server
     // but we don't know what.
     res.status(500).send('Something failed.')
