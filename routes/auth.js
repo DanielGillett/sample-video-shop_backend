@@ -6,6 +6,10 @@ const { User } = require('../models/user');
 const express = require('express');
 const router = express.Router();
 
+// ToDo: log out user
+//  - remove the token from the header
+// - done on the 'client' side.
+
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
