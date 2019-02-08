@@ -36,3 +36,6 @@ transport for logging messages in a file...
 
 // winston needs more study.  We're using a different version of Winston 
 // which seems to have more involved methods setting it up corretly.
+
+// the setup appears to have changed.  Meta data is not coming out 
+// they way I would expect.  Use docmentation.

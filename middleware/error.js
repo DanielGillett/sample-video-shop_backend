@@ -3,6 +3,9 @@ const winston = require('winston');
 // winston needs more study.  We're using a different version of Winston 
 // which seems to have more involved methods setting it up corretly.
 
+// the setup appears to have changed.  Meta data is not coming out 
+// they way I would expect.  Use docmentation.
+
 module.exports = function(err, req, res, next) {
     // Log the error
     // 1) set the logging level:
