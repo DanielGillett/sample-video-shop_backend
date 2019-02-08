@@ -1,4 +1,4 @@
-const auth = require('../middleware/auth');
+const asyncMiddleware = require('../middleware/async');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -10,7 +10,7 @@ const router = express.Router();
 //  - remove the token from the header
 // - done on the 'client' side.
 
-router.post('/', async (req, res) => {
+router.post('/', asyncMiddleware(async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -21,14 +21,9 @@ router.post('/', async (req, res) => {
     if (!validPassword) return res.status(400).send('Invalid email or password.');
 
     const token = user.generateAuthToken();
-
-    try{
-        res.send(token);
-    }
-    catch (err) {
-        console.error('Error: ', err);
-    }
-});
+    
+    res.send(token);
+}));
 
 function validate(req) {
     const schema = {

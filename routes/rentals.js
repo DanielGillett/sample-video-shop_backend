@@ -1,4 +1,6 @@
+const asyncMiddleware = require('../middleware/async');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const { Rental, validate } = require('../models/rental');
 const { Movie } = require('../models/movie');
 const { Customer } = require('../models/customer');
@@ -10,17 +12,17 @@ const router = express.Router();
 // Transaction-like mod
 Fawn.init(mongoose);
 
-router.get('/',  async (req, res) => {
+router.get('/',  asyncMiddleware(async (req, res) => {
     const rentals = await Rental.find().sort('-dateOut');
-    // if(!rentals) return res.status(400).send('No rentals.');
+    
     res.send(rentals);
-});
+}));
 
-router.get('/:id',  async (req, res) => {
+router.get('/:id',  asyncMiddleware(async (req, res) => {
     res.send('Todo: build the rental id get request');
-});
+}));
 
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, asyncMiddleware(async (req, res) => {
     const { error } = validate(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -58,29 +60,24 @@ router.post('/', auth, async (req, res) => {
         // fails, none of this will be applied.
         movie.save(); */
 
-        try{
-            // you can read more about Fawn under gitHub documentation
-            new Fawn.Task()
-                .save('rentals', rental)
-                .update('movies', { _id: movie._id }, {
-                    $inc: { numberInStock: -1 }
-                })
-                //.remove() // need to study gitHub docs
-                .run();
-        }
-        catch(ex) {
-            res.status(500).send('Something failed.', ex)
-        }
+        // you can read more about Fawn under gitHub documentation
+        new Fawn.Task()
+            .save('rentals', rental)
+            .update('movies', { _id: movie._id }, {
+                $inc: { numberInStock: -1 }
+            })
+            //.remove() // need to study gitHub docs
+            .run();
 
     res.send(rental)
-});
+}));
 
-router.put('/:id', auth,  async (req, res) => {
+router.put('/:id', auth,  asyncMiddleware(async (req, res) => {
     res.send('Todo: build the rental id put request');
-});
+}));
 
-router.delete('/:id', auth,  async (req, res) => {
+router.delete('/:id', [auth, admin],  asyncMiddleware(async (req, res) => {
     res.send('Todo: build the rental id delete request');
-});
+}));
 
 module.exports = router;
