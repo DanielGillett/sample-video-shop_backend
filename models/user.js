@@ -23,7 +23,12 @@ const userSchema = new mongoose.Schema({
         minlength: 5,
         maxlength: 1024
     },
-    isAdmin: Boolean
+    isAdmin: Boolean,
+    roles: ['standard, editor, writer'], // type of user
+    operations: ['delete genres, create genres'] // more granular
+    // look up solutions for role based and granular based
+    // should be able to figure this out however based on what you
+    // have here!
 });
 
 userSchema.methods.generateAuthToken = function() {
