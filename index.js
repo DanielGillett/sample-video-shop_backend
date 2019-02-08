@@ -1,3 +1,4 @@
+const error = require('./middleware/error');
 const config = require('config');
 // moved these two so we only have to reference it once
 const Joi = require('joi');
@@ -30,6 +31,7 @@ app.use('/api/rentals/', rentals);
 app.use('/api/users/', users);
 app.use('/api/auth', auth);
 app.use('/', home);
+app.use(error);
 
 // Set or Export a port in terminal...
 // BASH terminal ► export PORT=5000
