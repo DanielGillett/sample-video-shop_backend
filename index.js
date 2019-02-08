@@ -17,6 +17,12 @@ const auth = require('./routes/auth');
 const express = require('express');
 const app = express();
 
+process.on('uncaughtException', (ex) => {
+    console.log('WE GOT AN UNCAUGHT EXCEPTION');
+    winston.error(ex.message, ex);
+});
+
+//  WINSTON...
 //winston.add(winston.transports.File, { filename: 'logfile.log' });
 winston.add(new winston.transports.File({ filename: 'logfile.log' }));
 // winston.add(new winston.transports.Console({ colorize: true, json: true }));
@@ -24,6 +30,9 @@ winston.add(new winston.transports.File({ filename: 'logfile.log' }));
 winston.add(new winston.transports.MongoDB({ 
     db: 'mongodb://localhost/vidly-app',
     level: 'error' }));
+
+throw new Error('Something failed during startup.');
+
 
 if (!config.get('jwtPrivateKey')) {
     console.error('FATAL ERROR: jwtPrivateKey is not defined.');
