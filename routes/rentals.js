@@ -1,4 +1,3 @@
-const asyncMiddleware = require('../middleware/async');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const { Rental, validate } = require('../models/rental');
@@ -12,17 +11,17 @@ const router = express.Router();
 // Transaction-like mod
 Fawn.init(mongoose);
 
-router.get('/',  asyncMiddleware(async (req, res) => {
+router.get('/',  async (req, res) => {
     const rentals = await Rental.find().sort('-dateOut');
     
     res.send(rentals);
-}));
+});
 
-router.get('/:id',  asyncMiddleware(async (req, res) => {
+router.get('/:id',  async (req, res) => {
     res.send('Todo: build the rental id get request');
-}));
+});
 
-router.post('/', auth, asyncMiddleware(async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const { error } = validate(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -70,14 +69,14 @@ router.post('/', auth, asyncMiddleware(async (req, res) => {
             .run();
 
     res.send(rental)
-}));
+});
 
-router.put('/:id', auth,  asyncMiddleware(async (req, res) => {
+router.put('/:id', auth,  async (req, res) => {
     res.send('Todo: build the rental id put request');
-}));
+});
 
-router.delete('/:id', [auth, admin],  asyncMiddleware(async (req, res) => {
+router.delete('/:id', [auth, admin],  async (req, res) => {
     res.send('Todo: build the rental id delete request');
-}));
+});
 
 module.exports = router;

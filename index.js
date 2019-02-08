@@ -1,3 +1,4 @@
+require('express-async-errors');
 const error = require('./middleware/error');
 const config = require('config');
 // moved these two so we only have to reference it once

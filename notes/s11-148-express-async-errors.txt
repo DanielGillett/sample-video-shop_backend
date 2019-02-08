@@ -1,0 +1,10 @@
+
+npm i express-async-errors
+use this option to remove the need for
+the middleware function we created in
+lesson 147. Removing Try_Catch Docs.
+
+There is no problem using the middleware
+function we created, except that it adds
+a 'little' bit of code noise to our route
+handlers (endpoints).  

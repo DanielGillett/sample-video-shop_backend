@@ -1,4 +1,3 @@
-const asyncMiddleware = require('../middleware/async');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -10,7 +9,7 @@ const router = express.Router();
 //  - remove the token from the header
 // - done on the 'client' side.
 
-router.post('/', asyncMiddleware(async (req, res) => {
+router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -23,7 +22,7 @@ router.post('/', asyncMiddleware(async (req, res) => {
     const token = user.generateAuthToken();
     
     res.send(token);
-}));
+});
 
 function validate(req) {
     const schema = {
