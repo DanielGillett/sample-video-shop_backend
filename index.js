@@ -17,22 +17,28 @@ const auth = require('./routes/auth');
 const express = require('express');
 const app = express();
 
-process.on('uncaughtException', (ex) => {
-    console.log('WE GOT AN UNCAUGHT EXCEPTION');
-    winston.error(ex.message, ex);
+//winston.ExceptionHandler = new winston.transports.File({ filename: 'uncaughtExceptions.log' });
+winston.handleExceptions(new winston.transports.File({ filename: './logs/uncaughtExceptions.log' }));
+
+process.on('unhandledRejection', (ex) => {
+    throw ex;
 });
 
-//  WINSTON...
-//winston.add(winston.transports.File, { filename: 'logfile.log' });
-winston.add(new winston.transports.File({ filename: 'logfile.log' }));
-// winston.add(new winston.transports.Console({ colorize: true, json: true }));
-// winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/vidly-app' }));
+winston.add(new winston.transports.File({ 
+    filename: './logs/uncaughtExceptions.log',
+    format: winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.printf(
+            info => `${info.timestamp} [Level]: ${info.level} [Message]: ${info.message}`
+        )
+    )
+}));
+
 winston.add(new winston.transports.MongoDB({ 
     db: 'mongodb://localhost/vidly-app',
-    level: 'error' }));
+    level: 'info' }));
 
-throw new Error('Something failed during startup.');
-
+// throw new Error('something crazy just happend and we dont know what!');
 
 if (!config.get('jwtPrivateKey')) {
     console.error('FATAL ERROR: jwtPrivateKey is not defined.');

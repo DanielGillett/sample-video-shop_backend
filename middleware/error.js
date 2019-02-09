@@ -1,25 +1,46 @@
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+require('winston-mongodb');
+const fs = require('fs');
+const path = require('path');
 
-// winston needs more study.  We're using a different version of Winston 
-// which seems to have more involved methods setting it up corretly.
+const env = process.env.NODE_ENV || 'development';
 
-// the setup appears to have changed.  Meta data is not coming out 
-// they way I would expect.  Use docmentation.
+const logDir = 'logs';
+if(!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+const filename = path.join(logDir, 'winston.log');
 
-module.exports = function(err, req, res, next) {
-    // Log the error
-    // 1) set the logging level:
-        //  error
-        //  warn
-        //  info
-        //  verbose
-        //  debug
-        //  silly
-    //winston.log('error', err.message);
-    winston.error(err.message, err);
-    //winston.error(new Error('Error as info'));
+// error, warn, info, verbose, debug, silly
+const logger = createLogger({
+    level: env === 'production' ? 'info' : 'debug',
+    transports: [
+        new transports.File({
+            filename,
+            format: format.combine(
+                format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+                format.printf(
+                    info => `${info.timestamp} [Level]: ${info.level} [Message]: ${info.message}`
+                )
+            )
+        }),
+        new transports.MongoDB({
+            db: 'mongodb://localhost/vidly-app'
+        })
+    ]
+});
 
-    // Internal Server Error - something failed on the server
-    // but we don't know what.
-    res.status(500).send('Something failed.')
+if(env !== 'production') {
+    logger.add(new transports.Console({
+        format: format.combine(
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+            format.colorize(),
+            format.printf(
+                info => `${info.timestamp} [Level]: ${info.level} [Message]: ${info.message}`
+            )
+        )
+    }));
 }
+     
+module.exports = (err, req, res, next) => {
+      logger.error(err.message);
+      res.status(500).send('Somethings went wrong!');
+    };
