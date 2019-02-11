@@ -17,8 +17,14 @@ const auth = require('./routes/auth');
 const express = require('express');
 const app = express();
 
-//winston.ExceptionHandler = new winston.transports.File({ filename: 'uncaughtExceptions.log' });
-winston.handleExceptions(new winston.transports.File({ filename: './logs/uncaughtExceptions.log' }));
+// winston default, but good to know it's setup like this.
+winston.exitOnError = true;
+
+// various examples:
+//https://github.com/winstonjs/winston#handling-uncaught-exceptions-with-winston
+winston.handleExceptions(new winston.transports.File({ 
+    filename: './logs/uncaughtExceptions.log',
+    handleExceptions: true }));
 
 process.on('unhandledRejection', (ex) => {
     throw ex;
