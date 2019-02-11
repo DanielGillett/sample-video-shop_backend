@@ -5,12 +5,12 @@ const config = require('config');
 // moved these two so we only have to reference it once
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
-const mongoose = require('mongoose');
-
 
 const express = require('express');
 const app = express();
+
 require('./startup/routs')(app);
+require('./startup/db')();
 
 // winston default, but good to know it's setup like this.
 winston.exitOnError = true;
@@ -18,6 +18,7 @@ winston.exitOnError = true;
 // various examples:
 //https://github.com/winstonjs/winston#handling-uncaught-exceptions-with-winston
 winston.handleExceptions(new winston.transports.File({ 
+    level: 'info',
     filename: './logs/uncaughtExceptions.log',
     handleExceptions: true }));
 
@@ -46,9 +47,7 @@ if (!config.get('jwtPrivateKey')) {
     process.exit(1); // anything but 0 (zero) is a fatal error
 }
 
-mongoose.connect('mongodb://localhost/vidly-app', { useNewUrlParser: true })
-    .then(() => console.log('Connected to MongoDB...'))
-    .catch(err => console.error('Could not connect to MongoDB...', err));
+
 
 
 
