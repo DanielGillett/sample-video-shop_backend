@@ -27,7 +27,7 @@ module.exports = function() {
             colorize: true, 
             prettyPrint: true
         })
-        );
+    );
         
         process.on('unhandledRejection', (ex) => {
             throw ex;
